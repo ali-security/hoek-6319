@@ -2395,6 +2395,14 @@ describe('shallow()', () => {
         expect(Hoek.shallow(null)).to.equal({});
         expect(Hoek.shallow(undefined)).to.equal({});
     });
+
+    it('prevents prototype poisoning', () => {
+
+        const a = JSON.parse('{ "__proto__": { "x": 1 } }');
+        expect(a.x).to.not.exist();
+        const b = Hoek.clone(a);
+        expect(b.x).to.not.exist();
+    });
 });
 
 describe('block()', () => {
